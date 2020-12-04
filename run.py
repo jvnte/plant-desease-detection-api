@@ -2,8 +2,8 @@ from tqdm import tqdm
 from src.train import *
 
 params = [
-    {'method': 'MyCNN', 'batch_size': 100},
-    {'method': 'InceptionV3', 'batch_size': 100}
+    {'method': 'my_cnn', 'batch_size': 100},
+    {'method': 'inception_v3', 'batch_size': 100}
 ]
 
 if __name__ == '__main__':

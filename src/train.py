@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 from datetime import datetime
-from src.models import InceptionV3, MyCNN
+from src.models import my_cnn, inception_v3
 
 IMAGE_TARGET_SIZE = (250, 250)
 INPUT_SHAPE = (250, 250, 3)
@@ -10,7 +10,7 @@ EPOCHS = 5
 OPTIMIZER = 'adam'
 LOSS = 'sparse_categorical_crossentropy'
 METRICS = 'accuracy'
-METHODS = ['MyCNN', 'InceptionV3']
+METHODS = ['my_cnn', 'inception_v3']
 
 
 class Train:
@@ -48,10 +48,10 @@ class Train:
         return train_ds, validation_ds
 
     def build(self):
-        if self.method == 'InceptionV3':
-            model = InceptionV3(N_LABELS)
-        if self.method == 'MyCNN':
-            model = MyCNN(N_LABELS)
+        if self.method == 'inception_v3':
+            model = inception_v3(N_LABELS, INPUT_SHAPE)
+        if self.method == 'my_cnn':
+            model = my_cnn(N_LABELS, INPUT_SHAPE)
 
         # Compile the model
         model.compile(self.optimizer, loss=self.loss, metrics=[self.metrics])
