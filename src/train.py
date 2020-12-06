@@ -1,27 +1,27 @@
 import tensorflow as tf
 
 from datetime import datetime
-from src.models import my_cnn, inception_v3
+from src.models import my_cnn, vgg16, mobile_net
 
-IMAGE_TARGET_SIZE = (250, 250)
-INPUT_SHAPE = (250, 250, 3)
 N_LABELS = 38
 EPOCHS = 5
 OPTIMIZER = 'adam'
 LOSS = 'sparse_categorical_crossentropy'
 METRICS = 'accuracy'
-METHODS = ['my_cnn', 'inception_v3']
+METHODS = ['my_cnn', 'vgg16', 'mobile_net']
 
 
 class Train:
     def __init__(self,
-                 batch_size=32,
-                 method='inception_v3',
-                 save=False):
+                 method,
+                 batch_size,
+                 input_shape,
+                 save=True):
         self.method = method
         if self.method not in METHODS:
             raise NotImplementedError(f'Method {self.method} not implemented')
         self.batch_size = batch_size
+        self.input_shape = input_shape
         self.loss = LOSS
         self.metrics = METRICS
         self.epochs = EPOCHS
@@ -36,22 +36,24 @@ class Train:
         train_ds = tf.keras.preprocessing.image_dataset_from_directory(
             directory='./dataset/train',
             seed=42,
-            image_size=IMAGE_TARGET_SIZE,
+            image_size=self.input_shape[:2],
             batch_size=self.batch_size)
 
         validation_ds = tf.keras.preprocessing.image_dataset_from_directory(
             directory='./dataset/valid',
             seed=42,
-            image_size=IMAGE_TARGET_SIZE,
+            image_size=self.input_shape[:2],
             batch_size=self.batch_size)
 
         return train_ds, validation_ds
 
     def build(self):
-        if self.method == 'inception_v3':
-            model = inception_v3(N_LABELS, INPUT_SHAPE)
-        if self.method == 'my_cnn':
-            model = my_cnn(N_LABELS, INPUT_SHAPE)
+        if self.method == 'vgg16':
+            model = vgg16(N_LABELS, self.input_shape)
+        elif self.method == 'my_cnn':
+            model = my_cnn(N_LABELS, self.input_shape)
+        elif self.method == 'mobile_net':
+            model = mobile_net(N_LABELS, self.input_shape)
 
         # Compile the model
         model.compile(self.optimizer, loss=self.loss, metrics=[self.metrics])
@@ -78,8 +80,7 @@ class Train:
                   epochs=self.epochs,
                   callbacks=[es, rl, tb])
 
-        # TODO https://www.tensorflow.org/guide/keras/save_and_serialize#custom_objects
         if save:
-            model.save(f'./models/{self.id}/{self.id}', save_format='tf')
+            model.save(f'./models/{self.id}/{self.id}')
 
         return None
