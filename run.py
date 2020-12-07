@@ -2,7 +2,7 @@ from tqdm import tqdm
 from src.train import *
 
 params = [
-    {'method': 'my_cnn', 'batch_size': 100, 'input_shape': (250, 250, 3)},
+    {'method': 'my_cnn', 'batch_size': 100, 'input_shape': (224, 224, 3)},
     {'method': 'vgg16', 'batch_size': 100, 'input_shape': (224, 224, 3)},
     {'method': 'mobile_net', 'batch_size': 100, 'input_shape': (224, 224, 3)}
 ]

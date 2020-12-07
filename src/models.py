@@ -1,6 +1,5 @@
-import tensorflow_hub as hub
 from tensorflow.keras import Model
-from tensorflow.keras.applications import VGG16
+from tensorflow.keras.applications import VGG16, MobileNet
 from tensorflow.keras.layers import (
     Input,
     BatchNormalization,
@@ -45,9 +44,14 @@ def vgg16(n_labels, input_shape):
 
 
 def mobile_net(n_labels, input_shape):
+    mobilenet_layer = MobileNet(weights='imagenet',
+                                include_top=False,
+                                input_shape=input_shape)
+    mobilenet_layer.trainable = False
+
     inputs = Input(shape=input_shape)
-    x = hub.KerasLayer("https://tfhub.dev/google/imagenet/mobilenet_v2_140_224/feature_vector/4",
-                       trainable=False)(inputs)
+    x = mobilenet_layer(inputs)
+    x = Flatten()(x)
     x = Dense(256, activation='relu')(x)
     x = Dropout(0.2)(x)
     outputs = Dense(n_labels, activation='softmax')(x)

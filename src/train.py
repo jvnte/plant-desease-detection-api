@@ -6,7 +6,7 @@ from src.models import my_cnn, vgg16, mobile_net
 N_LABELS = 38
 EPOCHS = 5
 OPTIMIZER = 'adam'
-LOSS = 'sparse_categorical_crossentropy'
+LOSS = 'categorical_crossentropy'
 METRICS = 'accuracy'
 METHODS = ['my_cnn', 'vgg16', 'mobile_net']
 
@@ -33,17 +33,17 @@ class Train:
 
     def create_datasets(self):
 
-        train_ds = tf.keras.preprocessing.image_dataset_from_directory(
-            directory='./dataset/train',
-            seed=42,
-            image_size=self.input_shape[:2],
-            batch_size=self.batch_size)
+        datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255)
 
-        validation_ds = tf.keras.preprocessing.image_dataset_from_directory(
-            directory='./dataset/valid',
-            seed=42,
-            image_size=self.input_shape[:2],
-            batch_size=self.batch_size)
+        train_ds = datagen.flow_from_directory('./dataset/train',
+                                               target_size=self.input_shape[:2],
+                                               batch_size=self.batch_size,
+                                               class_mode='categorical')
+
+        validation_ds = datagen.flow_from_directory('./dataset/valid',
+                                                    target_size=self.input_shape[:2],
+                                                    batch_size=self.batch_size,
+                                                    class_mode='categorical')
 
         return train_ds, validation_ds
 
