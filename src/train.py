@@ -81,6 +81,6 @@ class Train:
                   callbacks=[es, rl, tb])
 
         if save:
-            model.save(f'./models/{self.id}/{self.id}')
+            model.save(f'./models/{self.id}')
 
         return None
