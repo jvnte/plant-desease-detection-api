@@ -1,23 +1,18 @@
 <script>
 
-import { Col, Container, Row, Button, Form, FormGroup, Input, Label } from 'sveltestrap';
+import { Button } from 'sveltestrap';
 
-	let out;
+	let out, avatar, avatar_name, fileinput;
 	const url = "http://127.0.0.1:8000/predict";
 
-	function getPrediction(model_path = "./models/mobile_net_100_20201207-090439/mobile_net_100_20201207-090439", img_path = './dataset/test/PotatoHealthy1.JPG') {
-
-		const payload = {};
-		payload["model_path"] = model_path;
-		payload["img_path"] = img_path;
+	function getPrediction(model_path, img_path) {
 
 		fetch(url, {
 			method: "POST",
 			headers: {
-				"Accept": "application/json",
 				"Content-Type": "application/json"
 			},
-			body: JSON.stringify(payload, ["message", "arguments", "type", "name"])
+			body: JSON.stringify({model_path: model_path, img_path: img_path})
 		})
 		.then(d => d.json())
     	.then(d => {
@@ -25,44 +20,62 @@ import { Col, Container, Row, Button, Form, FormGroup, Input, Label } from 'svel
 		});
 		}
 
+	const onFileSelected =(e)=>{
+		let image = e.target.files[0];
+			avatar_name = image.name;
+            let reader = new FileReader();
+            reader.readAsDataURL(image);
+            reader.onload = e => {
+                 avatar = e.target.result
+            };
+	}
+
 </script>
 
-<main>
-	<Container>
-		<Form>
-		<FormGroup>
-    		<Label for="exampleFile">File</Label>
-    		<Input type="file" name="file" id="exampleFile" oninput="predimg.src=window.URL.createObjectURL(this.files[0])" />
-			<img id="predimg" src="" width="200px" height="200px" alt = " "/>
-		</FormGroup>
-	</Form>
-		<Button on:click={getPrediction}>Get a prediction</Button>
-	</Container>
+<div id="app">
+	<h1>Upload Image</h1>
+		{#if avatar}
+        <img class="avatar" src="{avatar}" alt="d" />
+		<p>{avatar_name}</p>
+		{:else}
+		<img class="avatar" src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png" alt="" />
+        {/if}
+		<img class="upload" src="https://static.thenounproject.com/png/625182-200.png" alt="" on:click={()=>{fileinput.click();}} />
+		<div class="chan" on:click={()=>{fileinput.click();}}>Choose Image</div>
+		<input style="display:none" type="file" accept=".jpg" on:change={(e)=>onFileSelected(e)} bind:this={fileinput} >
+		{#if avatar_name}
+		<Button on:click={() => getPrediction('./models/vgg16_100_20201206-195647', './dataset/test/' + avatar_name)}>Get a prediction</Button>
+		{/if}
 	{#if out}
 	<h1>This is the outcome:</h1>
-	<p>Target: {out.target}</p>
-	<p>Prediction : {out.prediction}</p>
+		<p>Prediction : {out.prediction}</p>
 	{/if}
-</main>
+
+</div>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
+
+	#app{
+	display:flex;
+		align-items:center;
+		justify-content:center;
+		flex-flow:column;
 	}
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
+	h1{
+		padding-top: 50px;
 	}
 
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
+	.upload{
+		display:flex;
+	    height:50px;
+		width:50px;
+		cursor:pointer;
 	}
+	.avatar{
+		display:flex;
+		height:200px;
+		width:200px;
+	}
+
 </style>

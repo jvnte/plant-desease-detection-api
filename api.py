@@ -10,7 +10,7 @@ from tensorflow.keras.preprocessing import image
 
 
 class Input(BaseModel):
-    model_path: str = './models/mobile_net_100_20201207-090439'
+    model_path: str = './models/my_cnn_100_20201206-081517'
     img_path: str = './dataset/test/PotatoHealthy1.JPG'
 
 
@@ -25,7 +25,7 @@ api.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["POST"],
     allow_headers=["*"],
 )
 
