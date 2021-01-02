@@ -2,7 +2,7 @@
 
 	let out, avatar, avatarName, fileinput, methodSelected;
 	const url = "http://127.0.0.1:8000/predict";
-	const methods = ['my_cnn', 'vgg16', 'mobilenet'];
+	const methods = ['my_cnn', 'vgg16', 'mobile_net'];
 
 	function getPrediction(model_path, img_path) {
 

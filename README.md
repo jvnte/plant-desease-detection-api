@@ -54,7 +54,7 @@ You can manipulate the JSON request body as you desire.
 The default JSON request body:
 ```json
 {
-  "model_path": "./models/mobile_net_100_20201207-090439'",
+  "model_path": "./models/my_cnn'",
   "img_path": ",./dataset/test/PotatoHealthy1.JPG"
 }
 ```
