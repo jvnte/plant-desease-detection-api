@@ -26,7 +26,6 @@ class Train:
         self.metrics = METRICS
         self.epochs = EPOCHS
         self.optimizer = OPTIMIZER
-        self.id = '_'.join([self.method, str(self.batch_size), datetime.now().strftime("%Y%m%d-%H%M%S")])
         self.train_ds, self.validation_ds = self.create_datasets()
         self.model = self.build()
         self.fit(save)
@@ -63,7 +62,7 @@ class Train:
     def fit(self, save):
 
         # Tensorboard callback
-        log_dir = 'logs/' + self.id
+        log_dir = 'logs/' + self.method + datetime.now().strftime("%Y%m%d-%H%M%S")
         tb = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
         # Early stopping callback
@@ -81,6 +80,6 @@ class Train:
                   callbacks=[es, rl, tb])
 
         if save:
-            model.save(f'./models/{self.id}')
+            model.save(f'./models/{self.method}')
 
         return None

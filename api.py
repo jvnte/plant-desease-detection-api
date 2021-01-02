@@ -10,7 +10,7 @@ from tensorflow.keras.preprocessing import image
 
 
 class Input(BaseModel):
-    model_path: str = './models/my_cnn_100_20201206-081517'
+    model_path: str = './models/my_cnn'
     img_path: str = './dataset/test/PotatoHealthy1.JPG'
 
 
@@ -53,8 +53,7 @@ def predict(params: Input):
     # Get prediction label
     prediction_label = sorted([x.split('/')[3] for x in glob("./dataset/train/*")])[np.argmax(prediction)]
 
-    return {'img_path': data["img_path"],
-            'target': target,
+    return {'target': target,
             'prediction': prediction_label}
 
 
