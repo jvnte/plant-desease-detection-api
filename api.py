@@ -10,7 +10,7 @@ from tensorflow.keras.preprocessing import image
 
 
 class Input(BaseModel):
-    model_path: str = './models/mobile_net_100_20201207-090439/mobile_net_100_20201207-090439'
+    model_path: str = './models/mobile_net_100_20201207-090439'
     img_path: str = './dataset/test/PotatoHealthy1.JPG'
 
 

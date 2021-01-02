@@ -4,7 +4,7 @@ from datetime import datetime
 from src.models import my_cnn, vgg16, mobile_net
 
 N_LABELS = 38
-EPOCHS = 5
+EPOCHS = 20
 OPTIMIZER = 'adam'
 LOSS = 'categorical_crossentropy'
 METRICS = 'accuracy'
