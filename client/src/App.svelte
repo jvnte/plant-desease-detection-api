@@ -1,9 +1,8 @@
 <script>
 
-import { Button } from 'sveltestrap';
-
-	let out, avatar, avatar_name, fileinput;
+	let out, avatar, avatarName, fileinput, methodSelected;
 	const url = "http://127.0.0.1:8000/predict";
+	const methods = ['my_cnn', 'vgg16', 'mobilenet'];
 
 	function getPrediction(model_path, img_path) {
 
@@ -22,7 +21,7 @@ import { Button } from 'sveltestrap';
 
 	const onFileSelected =(e)=>{
 		let image = e.target.files[0];
-			avatar_name = image.name;
+			avatarName = image.name;
             let reader = new FileReader();
             reader.readAsDataURL(image);
             reader.onload = e => {
@@ -33,18 +32,25 @@ import { Button } from 'sveltestrap';
 </script>
 
 <div id="app">
+
 	<h1>Upload Image</h1>
 		{#if avatar}
         <img class="avatar" src="{avatar}" alt="d" />
-		<p>{avatar_name}</p>
+		<p>{avatarName}</p>
 		{:else}
 		<img class="avatar" src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png" alt="" />
         {/if}
 		<img class="upload" src="https://static.thenounproject.com/png/625182-200.png" alt="" on:click={()=>{fileinput.click();}} />
 		<div class="chan" on:click={()=>{fileinput.click();}}>Choose Image</div>
 		<input style="display:none" type="file" accept=".jpg" on:change={(e)=>onFileSelected(e)} bind:this={fileinput} >
-		{#if avatar_name}
-		<Button on:click={() => getPrediction('./models/vgg16_100_20201206-195647', './dataset/test/' + avatar_name)}>Get a prediction</Button>
+		{#if avatarName}
+		<select bind:value={methodSelected}>
+			{#each methods as method}
+				<option>{method}</option>
+			{/each}
+		</select>
+		<br>
+		<button on:click={() => getPrediction('./models/' + methodSelected, './dataset/test/' + avatarName)}>Get a prediction</button>
 		{/if}
 	{#if out}
 	<h1>This is the outcome:</h1>
@@ -63,7 +69,15 @@ import { Button } from 'sveltestrap';
 	}
 
 	h1{
-		padding-top: 50px;
+		margin-top: 50px;
+	}
+
+	select{
+		margin-top: 20px;
+	}
+
+	button{
+		margin-top: 20px;
 	}
 
 	.upload{
