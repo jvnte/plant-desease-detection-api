@@ -1,4 +1,4 @@
-## Welcome to Plant Detection
+## Welcome to Plant Desease Detection API
 
 An API that predicts plant deseases based on leaf images from this [Kaggle challenge](https://www.kaggle.com/vipoooool/new-plant-diseases-dataset)
 
