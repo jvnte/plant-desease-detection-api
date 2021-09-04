@@ -1,6 +1,6 @@
 ## Welcome to Plant Desease Detection API
 
-An API that predicts plant deseases based on leaf images from this [Kaggle challenge](https://www.kaggle.com/vipoooool/new-plant-diseases-dataset)
+An API that returns whether a plant has a desease based on leaf images from this [Kaggle challenge](https://www.kaggle.com/vipoooool/new-plant-diseases-dataset). The CV models can be easily trained and used for inference. FastAPI is used as web framework for building the API.
 
 ## Prerequisites
 
